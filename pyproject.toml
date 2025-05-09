@@ -1,0 +1,19 @@
+[project]
+name = "backend_pi"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "joaovnpt", email = "joaovitoguiotti8@gmail.com"},
+]
+dependencies = ["django>=5.2.1", "djangorestframework>=3.16.0"]
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
