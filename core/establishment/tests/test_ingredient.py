@@ -6,7 +6,7 @@ from core.establishment.models import Ingredient
 
 class TestIngredientAPI(APITestCase):
     def setUp(self):
-        self.ingretient = Ingredient.objects.create(
+        self.ingredient = Ingredient.objects.create(
             name="Morango", portion="4", stock="10", price="3.50", unit="g"
         )
 
@@ -34,7 +34,7 @@ class TestIngredientAPI(APITestCase):
         self.assertEqual(response.data[0]["name"], "Morango")
 
     def test_ingredient_detail(self):
-        url = reverse("api:ingredient-detail", args=[self.ingredient.id])
+        url = reverse("api:ingredients-detail", args=[self.ingredient.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["name"], "Morango")
