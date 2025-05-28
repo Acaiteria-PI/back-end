@@ -1,1 +1,2 @@
 from .establishment import EstablishmentViewSet
+from .ingredient import IngredientViewSet

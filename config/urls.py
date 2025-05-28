@@ -18,9 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from core.establishment.views.establishment import EstablishmentViewSet
+from core.establishment.views.ingredient import IngredientViewSet
 
 router = DefaultRouter()
 router.register(r'establishments', EstablishmentViewSet, basename='establishments')
+router.register(r'ingredients', IngredientViewSet, basename='ingredients')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
