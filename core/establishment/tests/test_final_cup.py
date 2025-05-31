@@ -7,17 +7,18 @@ from core.establishment.models import FinalCup, Ingredient, Recipient
 class TestFinalCupAPI(APITestCase):
     def setUp(self):
         self.ingredient1 = Ingredient.objects.create(
-            name='Acai', portion='200', stock='500', price='12', unity='ml'
+            name='Acai', portion='200', stock='500', price='12', unit='ml'
         )
         self.ingredient2 = Ingredient.objects.create(
-            name='Morango', portion='3', stock='100', price='3', unity='un'
+            name='Morango', portion='3', stock='100', price='3', unit='un'
         )
         self.recipient = Recipient.objects.create(
             title='Medium recipient', quantity_ml='200', price='15', stock='100', content=self.ingredient1
         )
         self.final_cup = FinalCup.objects.create(
-            name="CopoFeito", price="20.00", recipient=self.recipient, ingredient=[self.ingredient1, self.ingredient2]
+            name="CopoFeito", price="20.00", recipient=self.recipient
         )
+        self.final_cup.ingredient.set([self.ingredient1, self.ingredient2])
 
     def test_final_cup_creation(self):
         url = reverse("api:final-cups-list")
@@ -26,8 +27,8 @@ class TestFinalCupAPI(APITestCase):
             {
                 "name": "Copo1",
                 "price": "30.00",
-                "recipient": self.recipient,
-                "ingredient": [self.ingredient1, self.ingredient2],
+                "recipient": self.recipient.id,
+                "ingredient": [self.ingredient1.id, self.ingredient2.id],
             },
         )
         self.assertEqual(response.status_code, 201)
@@ -54,8 +55,8 @@ class TestFinalCupAPI(APITestCase):
             {
                 "name": "Updated cup",
                 "price": "45.00",
-                "recipient": self.recipient,
-                "ingredient": [self.ingredient1, self.ingredient2],
+                "recipient": self.recipient.id,
+                "ingredient": [self.ingredient1.id, self.ingredient2.id],
             },
         )
         self.assertEqual(response.status_code, 200)
