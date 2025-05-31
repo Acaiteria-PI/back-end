@@ -25,7 +25,7 @@ class TestFinalCupAPI(APITestCase):
         response = self.client.post(
             url,
             {
-                "name": "Copo1",
+                "name": "CopoFeito",
                 "price": "30.00",
                 "recipient": self.recipient.id,
                 "ingredient": [self.ingredient1.id, self.ingredient2.id],
@@ -33,20 +33,20 @@ class TestFinalCupAPI(APITestCase):
         )
         self.assertEqual(response.status_code, 201)
         self.assertEqual(FinalCup.objects.count(), 2)
-        self.assertEqual(FinalCup.objects.get(id=2).name, "Copo1")
+        self.assertEqual(FinalCup.objects.get(id=2).name, "CopoFeito")
 
     def test_final_cup_list(self):
         url = reverse("api:final-cups-list")
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["name"], "Copo1")
+        self.assertEqual(response.data[0]["name"], "CopoFeito")
 
     def test_final_cup_detail(self):
         url = reverse("api:final-cups-detail", args=[self.final_cup.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["name"], "Copo1")
+        self.assertEqual(response.data["name"], "CopoFeito")
 
     def test_final_cup_update(self):
         url = reverse("api:final-cups-detail", args=[self.final_cup.id])

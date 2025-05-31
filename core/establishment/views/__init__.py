@@ -1,3 +1,4 @@
 from .establishment import EstablishmentViewSet
 from .ingredient import IngredientViewSet
 from .recipient import RecipientViewSet
+from .final_cup import FinalCupViewSet
