@@ -20,11 +20,13 @@ from rest_framework.routers import DefaultRouter
 from core.establishment.views.establishment import EstablishmentViewSet
 from core.establishment.views.ingredient import IngredientViewSet
 from core.establishment.views.recipient import RecipientViewSet
+from core.establishment.views.final_cup import FinalCupViewSet
 
 router = DefaultRouter()
 router.register(r'establishments', EstablishmentViewSet, basename='establishments')
 router.register(r'ingredients', IngredientViewSet, basename='ingredients')
 router.register(r'recipients', RecipientViewSet, basename='recipients')
+router.register(r'final-cups', FinalCupViewSet, basename='final-cups')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
