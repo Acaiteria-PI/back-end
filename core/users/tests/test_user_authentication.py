@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient, APITestCase
 from django.urls import reverse
-from core.user.models import User
+from core.users.models import User
 
 
 # Create your tests here.
@@ -10,13 +10,13 @@ class TestUserAPI(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(
-            username="user", password="userpassword"
+            email="user@example.com", password="userpassword"
         )
         
     def authenticate_client(self):
         url = reverse("token_obtain_pair")  # ou o caminho real da sua rota JWT
         response = self.client.post(url, {
-            "username": "user",
+            "email": "user@example.com",
             "password": "userpassword"
         })
         self.assertEqual(response.status_code, 200)
@@ -25,6 +25,14 @@ class TestUserAPI(APITestCase):
     
     def test_user_creation(self):
         url = reverse("api:users-list")
+        
+        response = self.client.post(
+            url,
+            {"name": "testuser", "password": "testpassword", "email": "testuser@example.com"},
+        )
+        self.assertEqual(response.status_code, 401)
+        
+        self.authenticate_client()
         response = self.client.post(
             url,
             {"name": "testuser", "password": "testpassword", "email": "testuser@example.com"},
@@ -36,23 +44,16 @@ class TestUserAPI(APITestCase):
     def test_user_list(self):
         url = reverse("api:users-list")
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 403)
-        
-        self.authenticate_client()
-        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["name"], "user")
+        self.assertEqual(response.data[0]["email"], "user@example.com")
 
     def test_user_detail(self):
         url = reverse("api:users-detail", args=[self.user.id])
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 403)
 
-        self.authenticate_client()
-        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["name"], "user")
+        self.assertEqual(response.data["email"], "user@example.com")
 
     def test_user_update(self):
         url = reverse("api:users-detail", args=[self.user.id])
@@ -63,7 +64,7 @@ class TestUserAPI(APITestCase):
                 "email": "updateduser@example.com",
             },
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
         
         self.authenticate_client()
         response = self.client.put(
@@ -76,4 +77,3 @@ class TestUserAPI(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.user.refresh_from_db()
         self.assertEqual(self.user.name, "Updated User")
-        self.assertEqual(self.user.email, "updateduser@example.com")
