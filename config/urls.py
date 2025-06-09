@@ -17,10 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 from core.establishment.views.establishment import EstablishmentViewSet
 from core.establishment.views.ingredient import IngredientViewSet
 from core.establishment.views.recipient import RecipientViewSet
 from core.establishment.views.final_cup import FinalCupViewSet
+from core.users.views import UserViewSet
 from core.establishment.views.combo import ComboViewSet
 
 router = DefaultRouter()
@@ -28,9 +35,12 @@ router.register(r'establishments', EstablishmentViewSet, basename='establishment
 router.register(r'ingredients', IngredientViewSet, basename='ingredients')
 router.register(r'recipients', RecipientViewSet, basename='recipients')
 router.register(r'final-cups', FinalCupViewSet, basename='final-cups')
+router.register(r'users', UserViewSet, basename='users')
 router.register(r'combos', ComboViewSet, basename='combos')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include((router.urls, 'api'), namespace='api')),
+    path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
