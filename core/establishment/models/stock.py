@@ -1,0 +1,14 @@
+from django.db import models
+from core.establishment.models import Ingredient
+
+class Stock(models.Model):
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    quantity = models.DecimalField(max_digits=10, decimal_places=2)
+    batch = models.CharField(max_length=100)
+    expiration_date = models.DateField()
+    supplier = models.CharField(max_length=100)
+    batch_price = models.DecimalField(decimal_places=2, max_digits=10)
+    unit_of_measure = models.CharField(max_length=20, default="g")
+
+    def __str__(self):
+        return f"{self.ingredient.name} - {self.batch}"
