@@ -7,7 +7,7 @@ from core.establishment.models import Ingredient
 class TestIngredientAPI(APITestCase):
     def setUp(self):
         self.ingredient = Ingredient.objects.create(
-            name="Morango", portion="4", stock="10", price="3.50", unit="g"
+            name="Morango", portion="4", price="3.50", unit_of_measure="g"
         )
 
     def test_ingredient_creation(self):
@@ -17,9 +17,8 @@ class TestIngredientAPI(APITestCase):
             {
                 "name": "Test Ingredient",
                 "portion": "5",
-                "stock": "15",
                 "price": "4.50",
-                "unit": "g",
+                "unit_of_measure": "g",
             },
         )
         self.assertEqual(response.status_code, 201)
@@ -46,9 +45,8 @@ class TestIngredientAPI(APITestCase):
             {
                 "name": "Updated Ingredient",
                 "portion": "8",
-                "stock": "200",
                 "price": "1.00",
-                "unit": "g",
+                "unit_of_measure": "g",
             },
         )
         self.assertEqual(response.status_code, 200)

@@ -23,12 +23,10 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from core.establishment.views.establishment import EstablishmentViewSet
-from core.establishment.views.ingredient import IngredientViewSet
-from core.establishment.views.recipient import RecipientViewSet
-from core.establishment.views.final_cup import FinalCupViewSet
+from core.establishment.views import EstablishmentViewSet, IngredientViewSet, RecipientViewSet, FinalCupViewSet, ComboViewSet, StockViewSet
+
 from core.users.views import UserViewSet
-from core.establishment.views.combo import ComboViewSet
+
 
 router = DefaultRouter()
 router.register(r'establishments', EstablishmentViewSet, basename='establishments')
@@ -37,6 +35,7 @@ router.register(r'recipients', RecipientViewSet, basename='recipients')
 router.register(r'final-cups', FinalCupViewSet, basename='final-cups')
 router.register(r'users', UserViewSet, basename='users')
 router.register(r'combos', ComboViewSet, basename='combos')
+router.register(r'stock', StockViewSet, basename='stock')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

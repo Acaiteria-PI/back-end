@@ -4,5 +4,5 @@ from core.establishment.models import Ingredient
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ['id', 'name', 'portion', 'stock', 'price', 'unit']
+        fields = ['id', 'name', 'portion', 'price', 'unit_of_measure']
         read_only_fields = ['id']

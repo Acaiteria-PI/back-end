@@ -3,3 +3,4 @@ from .ingredient import IngredientSerializer
 from .recipient import RecipientSerializer
 from .final_cup import FinalCupSerializer
 from .combo import ComboSerializer
+from .stock import StockSerializer
