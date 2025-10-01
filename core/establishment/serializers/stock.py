@@ -1,21 +1,23 @@
 from rest_framework import serializers
 from core.establishment.models import Stock, Ingredient
+from core.establishment.serializers import IngredientSerializer
 
 
 class StockSerializer(serializers.ModelSerializer):
-    # accept ingredient as PK for writes
     ingredient = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
+    ingredient_data = IngredientSerializer(source="ingredient", read_only=True)
 
     class Meta:
         model = Stock
-        fields = ['id', 'ingredient', 'quantity', 'batch', 'expiration_date', 'supplier', 'batch_price', 'unit_of_measure']
-        read_only_fields = ['id']
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        # present ingredient as its name in responses to match tests
-        try:
-            data['ingredient'] = instance.ingredient.name
-        except Exception:
-            pass
-        return data
+        fields = [
+            "id",
+            "ingredient",
+            "ingredient_data",
+            "quantity",
+            "batch",
+            "expiration_date",
+            "supplier",
+            "batch_price",
+            "unit_of_measure",
+        ]
+        read_only_fields = ["id"]
