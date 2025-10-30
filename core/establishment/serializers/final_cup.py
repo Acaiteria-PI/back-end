@@ -9,5 +9,5 @@ class FinalCupSerializer(ModelSerializer):
     
     class Meta:
         model = FinalCup
-        fields = ["name", "price", "recipient", "recipient_data", "ingredient", "ingredient_data"]
+        fields = ["id", "name", "price", "recipient", "recipient_data", "ingredient", "ingredient_data"]
         read_only_fields = ["id"]
