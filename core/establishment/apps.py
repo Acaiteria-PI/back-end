@@ -4,3 +4,6 @@ from django.apps import AppConfig
 class EstablishmentConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'core.establishment'
+    
+    def ready(self):
+        import core.establishment.signals

@@ -55,8 +55,9 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "rest_framework_simplejwt",
-    "core.establishment",
-    "core.users",
+    "core.establishment.apps.EstablishmentConfig",
+    "core.users.apps.UsersConfig",
+    "core.orders.apps.OrdersConfig",
 ]
 
 MIDDLEWARE = [

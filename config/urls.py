@@ -23,8 +23,8 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from core.establishment.views import EstablishmentViewSet, IngredientViewSet, RecipientViewSet, FinalCupViewSet, ComboViewSet, StockViewSet
-
+from core.establishment.views import EstablishmentViewSet, IngredientViewSet, RecipientViewSet, FinalCupViewSet, ComboViewSet, StockViewSet, CustomCupViewSet
+from core.orders.views import OrderViewSet, OrderItemViewSet
 from core.users.views import UserViewSet
 
 
@@ -36,6 +36,9 @@ router.register(r'final-cups', FinalCupViewSet, basename='final-cups')
 router.register(r'users', UserViewSet, basename='users')
 router.register(r'combos', ComboViewSet, basename='combos')
 router.register(r'stock', StockViewSet, basename='stock')
+router.register(r'custom-cups', CustomCupViewSet, basename='custom-cups')
+router.register(r'orders', OrderViewSet, basename='orders')
+router.register(r'order-items', OrderItemViewSet, basename='order-items')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
