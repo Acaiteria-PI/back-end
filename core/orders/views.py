@@ -11,6 +11,9 @@ class OrderViewSet(ModelViewSet):
         if self.action == 'retrieve':
             return OrderDetailSerializer
         return OrderSerializer
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(establishment=self.request.user.establishment, responsible_person=user)
     
     
 class OrderItemViewSet(ModelViewSet):
