@@ -30,7 +30,7 @@ class OrderItem(models.Model):
     final_cup = models.ForeignKey(FinalCup, null=True, blank=True, on_delete=models.SET_NULL)
     custom_cup = models.ForeignKey(CustomCup, null=True, blank=True, on_delete=models.SET_NULL)
     combo = models.ForeignKey(Combo, null=True, blank=True, on_delete=models.SET_NULL)
-    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, related_name='items', on_delete=models.SET_NULL)
     quantity = models.PositiveIntegerField(default=1)
     unity_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, blank=True)
