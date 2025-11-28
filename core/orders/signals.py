@@ -17,11 +17,11 @@ def update_order_total_on_item_change(sender, instance, **kwargs):
         else:
             item_price = 0
         
-        instance.unity_price = item_price
+        instance.unit_price = item_price
         instance.total_price = item_price * instance.quantity
         instance._skip_order_update = True
         
-        instance.save(update_fields=['unity_price', 'total_price'])
+        instance.save(update_fields=['unit_price', 'total_price'])
         
         if hasattr(instance, '_skip_order_update'):
             del instance._skip_order_update
