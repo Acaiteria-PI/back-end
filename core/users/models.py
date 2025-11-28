@@ -12,7 +12,7 @@ class User(AbstractUser):
     email = models.EmailField(_("e-mail address"), unique=True)
     registration = models.IntegerField(null=True, unique=True)
     name = models.CharField(max_length=255, null=True)
-    Establishment = models.ForeignKey(
+    establishment = models.ForeignKey(
         Establishment,
         on_delete=models.CASCADE,
         related_name="worker",

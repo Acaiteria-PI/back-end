@@ -10,12 +10,12 @@ from core.users.models import User
 class UserAdmin(BaseUserAdmin):
     ordering = ["-date_joined"]
     list_display = ("email", "name", "registration", "is_management", "is_staff", "is_active")
-    list_filter = ("is_management", "is_staff", "is_active", "Establishment")
+    list_filter = ("is_management", "is_staff", "is_active", "establishment")
     search_fields = ("email", "name", "registration")
 
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        (_("Informações pessoais"), {"fields": ("name", "registration", "Establishment")}),
+        (_("Informações pessoais"), {"fields": ("name", "registration", "establishment")}),
         (_("Permissões"), {"fields": ("is_active", "is_staff", "is_superuser", "is_management", "groups", "user_permissions")}),
         (_("Datas importantes"), {"fields": ("last_login", "date_joined")}),
     )
@@ -23,7 +23,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             "classes": ("wide",),
-            "fields": ("email", "name", "registration", "Establishment", "password1", "password2", "is_active", "is_staff", "is_superuser", "is_management"),
+            "fields": ("email", "name", "registration", "establishment", "password1", "password2", "is_active", "is_staff", "is_superuser", "is_management"),
         }),
     )
 
