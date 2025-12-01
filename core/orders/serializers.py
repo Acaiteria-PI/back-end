@@ -11,18 +11,7 @@ class OrderSerializer(ModelSerializer):
         model = Order
         fields = ["id", "customer", "order_date", "total_amount", 'establishment', "status", "is_paid", "responsible_person", "responsible_person_data"]
         read_only_fields = ["id", "establishment", "responsible_person", "order_date", "total_amount", "responsible_person_data"]
-        
-        
-class OrderDetailSerializer(ModelSerializer):
-    customer = UserSerializer(read_only=True)
-    establishment = EstablishmentSerializer(read_only=True)
-    items = ModelSerializer(many=True, read_only=True)
-    
-    class Meta:
-        model = Order
-        fields = ["id", "customer", "establishment", "order_date", "total_amount", "status", "is_paid", "items"]
-        read_only_fields = ["id"]
-        
+
 class OrderItemSerializer(ModelSerializer):
     order = PrimaryKeyRelatedField(queryset=Order.objects.all())
     combo = PrimaryKeyRelatedField(queryset=Combo.objects.all(), required=False, allow_null=True)
@@ -32,5 +21,16 @@ class OrderItemSerializer(ModelSerializer):
     class Meta:
         model = OrderItem
         fields = ["id", "order", "type", "combo", "final_cup", "custom_cup", "quantity", "unit_price", "total_price"]
+        read_only_fields = ["id"]
+
+
+class OrderDetailSerializer(ModelSerializer):
+    customer = UserSerializer(read_only=True)
+    establishment = EstablishmentSerializer(read_only=True)
+    items = OrderItemSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = Order
+        fields = ["id", "customer", "establishment", "order_date", "total_amount", "status", "is_paid", "items"]
         read_only_fields = ["id"]
         

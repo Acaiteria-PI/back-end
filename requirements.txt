@@ -2,6 +2,7 @@
 # Please do not edit it manually.
 
 asgiref==3.8.1
+attrs==25.4.0
 click==8.2.1
 colorama==0.4.6; platform_system == "Windows"
 dj-database-url==3.0.0
@@ -9,14 +10,22 @@ django==5.2.3
 django-cors-headers==4.7.0
 djangorestframework==3.16.0
 djangorestframework-simplejwt==5.5.0
+drf-spectacular==0.29.0
 gunicorn==23.0.0
 h11==0.16.0
+inflection==0.5.1
+jsonschema==4.25.1
+jsonschema-specifications==2025.9.1
 packaging==25.0
 psycopg2-binary==2.9.10
 pyjwt==2.9.0
 python-dotenv==1.1.0
+pyyaml==6.0.3
+referencing==0.37.0
+rpds-py==0.30.0
 sqlparse==0.5.3
 typing-extensions==4.14.0
 tzdata==2025.2; sys_platform == "win32"
+uritemplate==4.2.0
 uvicorn==0.34.3
 whitenoise==6.9.0

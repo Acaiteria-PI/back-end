@@ -18,6 +18,5 @@ class StockSerializer(serializers.ModelSerializer):
             "expiration_date",
             "supplier",
             "batch_price",
-            "unit_of_measure",
         ]
         read_only_fields = ["id"]

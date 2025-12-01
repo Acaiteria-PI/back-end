@@ -1,7 +1,7 @@
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
-from core.orders.models import OrderItem
-
+from core.orders.models import OrderItem, Order
+from core.orders.utils import process_order_stock
 
 @receiver(post_save, sender=OrderItem)
 def update_order_total_on_item_change(sender, instance, **kwargs):
@@ -32,3 +32,17 @@ def update_order_total_on_item_change(sender, instance, **kwargs):
 
         order.save(update_fields=['total_amount'])
     
+@receiver(post_save, sender=Order)
+def update_stock_in_progress(sender, instance, created, **kwargs):
+
+    if instance.status != Order.statusChoices.IN_PROGRESS:
+        return
+
+    if hasattr(instance, '_stock_already_processed'):
+        return
+
+    try:
+        instance._stock_already_processed = True
+        process_order_stock(instance)
+    finally:
+        del instance._stock_already_processed
