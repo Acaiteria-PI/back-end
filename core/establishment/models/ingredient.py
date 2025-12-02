@@ -5,6 +5,7 @@ class Ingredient(models.Model):
     portion = models.IntegerField()
     price = models.DecimalField(decimal_places=2, max_digits=10)
     unit_of_measure = models.CharField(max_length=20, default="g")
+    is_addon = models.BooleanField(default=False, null=True, blank=True)
 
     def __str__(self):
         return self.name
