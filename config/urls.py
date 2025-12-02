@@ -25,6 +25,7 @@ from rest_framework_simplejwt.views import (
 
 from core.establishment.views import EstablishmentViewSet, IngredientViewSet, RecipientViewSet, FinalCupViewSet, ComboViewSet, StockViewSet, CustomCupViewSet
 from core.orders.views import OrderViewSet, OrderItemViewSet
+from core.orders.pix_views import generate_pix
 from core.users.views import UserViewSet
 
 from drf_spectacular.views import (
@@ -46,11 +47,13 @@ router.register(r'custom-cups', CustomCupViewSet, basename='custom-cups')
 router.register(r'orders', OrderViewSet, basename='orders')
 router.register(r'order-items', OrderItemViewSet, basename='order-items')
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include((router.urls, 'api'), namespace='api')),
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path('api/generate-pix/', generate_pix, name='generate-pix'),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
         "api/swagger/",
