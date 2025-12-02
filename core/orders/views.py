@@ -8,7 +8,7 @@ import requests
 
 # Create your views here.
 class OrderViewSet(ModelViewSet):
-    queryset = Order.objects.all()
+    queryset = Order.objects.all().order_by('-order_date')
     http_method_names = ["get", "post", "put", "delete"]
     def get_serializer_class(self):
         if self.action == 'retrieve':
