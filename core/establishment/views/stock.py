@@ -15,6 +15,6 @@ class StockViewSet(ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def low_stock(self, request):
-        stock_items = Stock.objects.filter(quantity__lt = 15)
+        stock_items = Stock.objects.filter(quantity__lt = 1000) # Estoque a baixo de que 1000g
         serializer = self.get_serializer(stock_items, many=True)
         return Response(serializer.data)
