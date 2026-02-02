@@ -40,6 +40,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://localhost:5173",
     "https://pe-de-acai.vercel.app",
+    "https://front-end-ztyr.vercel.app",
 ]
 
 
@@ -52,11 +53,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_filters",
     "drf_spectacular",
     "corsheaders",
     "rest_framework",
     "rest_framework_simplejwt",
+    "core.adress.apps.AdressConfig",
     "core.establishment.apps.EstablishmentConfig",
+    "core.supplier.apps.SupplierConfig",
     "core.users.apps.UsersConfig",
     "core.orders.apps.OrdersConfig",
 ]
@@ -181,5 +185,6 @@ STORAGES = {
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60)
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
 }

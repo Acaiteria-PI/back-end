@@ -27,6 +27,8 @@ from core.establishment.views import EstablishmentViewSet, IngredientViewSet, Re
 from core.orders.views import OrderViewSet, OrderItemViewSet
 from core.orders.pix_views import generate_pix
 from core.users.views import UserViewSet
+from core.adress.views import AddressViewSet
+from core.supplier.views import SupplierViewSet, ContactViewSet
 
 from drf_spectacular.views import (
     SpectacularAPIView,
@@ -46,6 +48,9 @@ router.register(r'stock', StockViewSet, basename='stock')
 router.register(r'custom-cups', CustomCupViewSet, basename='custom-cups')
 router.register(r'orders', OrderViewSet, basename='orders')
 router.register(r'order-items', OrderItemViewSet, basename='order-items')
+router.register(r'addresses', AddressViewSet, basename='addresses')
+router.register(r'suppliers', SupplierViewSet, basename='suppliers')
+router.register(r'contacts', ContactViewSet, basename='contacts')
 
 
 urlpatterns = [
