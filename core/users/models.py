@@ -19,7 +19,6 @@ class User(AbstractUser):
         null=True,
         blank=True
     )
-    is_management = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['name']
