@@ -13,7 +13,7 @@ class Order(models.Model):
     class paymentMethodChoices(models.TextChoices):
         PIX = "PIX", "Pix"
         CARD = "CARD", "Cartão"
-        CASH = "CASSH", "Dinheiro"
+        CASH = "CASH", "Dinheiro"
 
     status = models.CharField(
         max_length=20, choices=statusChoices.choices, default=statusChoices.PENDING
@@ -27,7 +27,7 @@ class Order(models.Model):
     )
     is_paid = models.BooleanField(default=False)
     payment_method = models.CharField(
-        max_length=20, choices=paymentMethodChoices.choices
+        max_length=20, choices=paymentMethodChoices.choices, null=True, blank=True
     )
 
 

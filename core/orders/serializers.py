@@ -1,4 +1,5 @@
 from core.orders.models import Order, OrderItem
+from rest_framework import serializers
 from core.establishment.models import Combo, CustomCup, FinalCup
 from core.establishment.serializers import (
     FinalCupSerializer,
@@ -67,7 +68,7 @@ class OrderItemSerializer(ModelSerializer):
 
 
 class OrderDetailSerializer(ModelSerializer):
-    customer = UserSerializer(read_only=True)
+    customer = serializers.CharField(read_only=True)
     establishment = EstablishmentSerializer(read_only=True)
     items = OrderItemSerializer(many=True, read_only=True)
 
