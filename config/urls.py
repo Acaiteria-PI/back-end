@@ -23,7 +23,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from core.establishment.views import EstablishmentViewSet, IngredientViewSet, RecipientViewSet, FinalCupViewSet, ComboViewSet, StockViewSet, CustomCupViewSet
+from core.establishment.views import EstablishmentViewSet, IngredientViewSet, RecipientViewSet, FinalCupViewSet, ComboViewSet, StockViewSet, CustomCupViewSet, DailyRevenueViewSet
 from core.orders.views import OrderViewSet, OrderItemViewSet
 from core.orders.pix_views import generate_pix
 from core.users.views import UserViewSet
@@ -51,6 +51,7 @@ router.register(r'order-items', OrderItemViewSet, basename='order-items')
 router.register(r'addresses', AddressViewSet, basename='addresses')
 router.register(r'suppliers', SupplierViewSet, basename='suppliers')
 router.register(r'contacts', ContactViewSet, basename='contacts')
+router.register(r'daily-revenues', DailyRevenueViewSet, basename='daily-revenues')
 
 
 urlpatterns = [
