@@ -67,44 +67,79 @@ def sum_amount_to_daily_revenue(daily_revenue, amount):
     daily_revenue.save()
 
 
+def subtract_revenue_when_order_canceled(daily_revenue, amount):
+    daily_revenue.total_amount -= amount
+    daily_revenue.total_orders_count -= 1
+    daily_revenue.save()
+
+
 @receiver(pre_save, sender=Order)
-def mark_payment_transition(sender, instance, **kwargs):
+def mark_payment_and_status_transition(sender, instance, **kwargs):
     if not instance.pk:
         instance._became_paid = False
+        instance._became_canceled = False
         return
-    
+
     old = Order.objects.get(pk=instance.pk)
 
+    # PAYMENT TRANSITION
     old_was_paid = old.is_paid
     new_is_paid = instance.is_paid
 
     if old_was_paid is False and new_is_paid is True:
         instance._became_paid = True
-    else: instance._became_paid = False
+    else:
+        instance._became_paid = False
+
+    # STATUS TRANSITION
+    if old.status != "CANCELED" and instance.status == "CANCELED":
+        instance._became_canceled = True
+    else:
+        instance._became_canceled = False
 
 
-@receiver(post_save, sender=Order)
-def register_daily_revenue(sender, instance, **kwargs):
+def handle_paid_transition(instance):
     if not getattr(instance, "_became_paid", False):
-        print("Order didnt get paid or was already paid.")
         return
 
     else:
-        daily_revenues = DailyRevenue.objects.filter(establishment=instance.establishment)
+        daily_revenues = DailyRevenue.objects.filter(
+            establishment=instance.establishment
+        )
 
         if len(daily_revenues) > 0:
             matched = False
             for daily_revenue in daily_revenues:
                 if daily_revenue.date.date() == instance.order_date.date():
-                    print("Sum")
                     sum_amount_to_daily_revenue(daily_revenue, instance.total_amount)
                     matched = True
-                    break # Stops the loop, so it doesnt keep checking other rows
+                    break  # Stops the loop, so it doesnt keep checking other rows
 
             if not matched:
-                print("No revenues today, creating one.")
                 return create_daily_revenue(instance.total_amount, instance)
-            
+
         else:
-            print("No revenues created, creating one.")
             return create_daily_revenue(instance.total_amount, instance)
+
+
+def handle_canceled_transition(instance):
+    if not getattr(instance, "_became_canceled", False):
+        return
+
+    order_revenue_register = DailyRevenue.objects.filter(
+        establishment=instance.establishment, date__date=instance.order_date.date()
+    ).first()
+
+    if order_revenue_register is None:
+        return
+
+    else:
+        subtract_revenue_when_order_canceled(order_revenue_register, instance.total_amount)
+
+
+@receiver(post_save, sender=Order)
+def register_daily_revenue(sender, instance, **kwargs):
+    if getattr(instance, "_became_canceled", False):
+        handle_canceled_transition(instance)
+    elif getattr(instance, "_became_paid", False):
+        handle_paid_transition(instance)
