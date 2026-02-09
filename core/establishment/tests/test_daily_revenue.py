@@ -24,6 +24,8 @@ class RegisterDailyRevenueSignalTests(TestCase):
             establishment=self.establishment,
         )
 
+    # === PAID TRANSITIONS ===
+
     def test_create_daily_revenue_on_first_order(self):
         order = Order.objects.create(
             customer="Ana",
@@ -76,7 +78,9 @@ class RegisterDailyRevenueSignalTests(TestCase):
             is_paid=False,
         )
 
-        self.assertEqual(DailyRevenue.objects.filter(establishment=self.establishment).count(), 0)
+        self.assertEqual(
+            DailyRevenue.objects.filter(establishment=self.establishment).count(), 0
+        )
 
     def test_edit_already_paid_order(self):
         order = Order.objects.create(
@@ -90,7 +94,7 @@ class RegisterDailyRevenueSignalTests(TestCase):
         order.is_paid = True
         order.save()
         # One more patch operation (shouldnt register one more orders_count)
-        order.is_paid=True
+        order.is_paid = True
         order.save()
 
         daily = DailyRevenue.objects.get(establishment=self.establishment)
@@ -109,7 +113,9 @@ class RegisterDailyRevenueSignalTests(TestCase):
         order.is_paid = False
         order.save()
 
-        self.assertEqual(DailyRevenue.objects.filter(establishment=self.establishment).count(), 0)
+        self.assertEqual(
+            DailyRevenue.objects.filter(establishment=self.establishment).count(), 0
+        )
 
     def test_create_daily_revenue_in_another_day(self):
         order = Order.objects.create(
@@ -135,4 +141,140 @@ class RegisterDailyRevenueSignalTests(TestCase):
         another_day_order.is_paid = True
         another_day_order.save()
 
-        self.assertEqual(DailyRevenue.objects.filter(establishment=self.establishment).count(), 2)
+        self.assertEqual(
+            DailyRevenue.objects.filter(establishment=self.establishment).count(), 2
+        )
+
+    # === CANCELED TRANSITIONS ===
+
+    def test_does_not_subtract_when_order_not_canceled(self):
+        order = Order.objects.create(
+            customer="Ana",
+            establishment=self.establishment,
+            responsible_person=self.user,
+            total_amount=Decimal("10.00"),
+            status="PENDING",
+            is_paid=False,
+        )
+
+        order.is_paid = True
+        order.status = "IN_PROGRESS"
+        order.save()
+
+        daily = DailyRevenue.objects.get(establishment=self.establishment)
+        self.assertEqual(daily.total_orders_count, 1)
+        self.assertEqual(daily.total_amount, Decimal("10.00"))
+
+        order.status = "COMPLETED"
+        order.save()
+
+        daily.refresh_from_db()
+        self.assertEqual(daily.total_orders_count, 1)
+        self.assertEqual(daily.total_amount, Decimal("10.00"))
+
+    def test_subtracts_once_when_status_changes_to_canceled(self):
+        order = Order.objects.create(
+            customer="Ana",
+            establishment=self.establishment,
+            responsible_person=self.user,
+            total_amount=Decimal("10.00"),
+            status="PENDING",
+            is_paid=False,
+        )
+        order2 = Order.objects.create(
+            customer="Pedro",
+            establishment=self.establishment,
+            responsible_person=self.user,
+            total_amount=Decimal("20.00"),
+            status="PENDING",
+            is_paid=False,
+        )
+
+        order.is_paid = True
+        order.status = "IN_PROGRESS"
+        order.save()
+        order2.is_paid = True
+        order2.status = "IN_PROGRESS"
+        order2.save()
+
+        order.status = "CANCELED"
+        order.save()
+
+        daily = DailyRevenue.objects.get(establishment=self.establishment)
+        self.assertEqual(daily.total_orders_count, 1)
+        self.assertEqual(daily.total_amount, Decimal("20.00"))
+
+    def test_does_not_subtract_again_when_canceled_order_is_saved_again(self):
+        order = Order.objects.create(
+            customer="Ana",
+            establishment=self.establishment,
+            responsible_person=self.user,
+            total_amount=Decimal("10.00"),
+            status="PENDING",
+            is_paid=False,
+        )
+        order2 = Order.objects.create(
+            customer="Pedro",
+            establishment=self.establishment,
+            responsible_person=self.user,
+            total_amount=Decimal("20.00"),
+            status="PENDING",
+            is_paid=False,
+        )
+
+        order.is_paid = True
+        order.status = "IN_PROGRESS"
+        order.save()
+        order2.is_paid = True
+        order2.status = "IN_PROGRESS"
+        order2.save()
+
+        order.status = "CANCELED"
+        order.save()
+
+        daily = DailyRevenue.objects.get(establishment=self.establishment)
+        self.assertEqual(daily.total_orders_count, 1)
+        self.assertEqual(daily.total_amount, Decimal("20.00"))
+
+        order.customer = "Ana Updated"
+        order.save()
+
+        daily.refresh_from_db()
+        self.assertEqual(daily.total_orders_count, 1)
+        self.assertEqual(daily.total_amount, Decimal("20.00"))
+
+    def test_cancel_paid_order(self):
+        order = Order.objects.create(
+            customer="Ana",
+            establishment=self.establishment,
+            responsible_person=self.user,
+            total_amount=Decimal("10.00"),
+            status="PENDING",
+            is_paid=False,
+        )
+
+        order1 = Order.objects.create(
+            customer="Pedro",
+            establishment=self.establishment,
+            responsible_person=self.user,
+            total_amount=Decimal("20.00"),
+            status="PENDING",
+            is_paid=False,
+        )
+
+        order.is_paid = True  # costumer paid the order
+        order.status = "IN_PROGRESS"
+        order.save()
+
+        order1.is_paid = True
+        order1.status = "IN_PROGRESS"
+        order1.save()
+
+        order.status = "CANCELED"  # costumer canceled the paid order
+        order.save()
+
+        daily = DailyRevenue.objects.get(establishment=self.establishment)
+        print(daily)
+        self.assertEqual(daily.total_orders_count, 1)
+        self.assertEqual(daily.total_amount, Decimal("20"))
+        
