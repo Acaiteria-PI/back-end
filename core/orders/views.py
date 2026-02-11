@@ -6,7 +6,7 @@ from core.orders.serializers import OrderSerializer, OrderDetailSerializer, Orde
 # Create your views here.
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all().order_by('-order_date')
-    http_method_names = ["get", "post", "put", "delete"]
+    http_method_names = ["get", "post", "patch", "put", "delete"]
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return OrderDetailSerializer
