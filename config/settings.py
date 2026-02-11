@@ -41,7 +41,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://pe-de-acai.vercel.app",
     "https://front-end-ztyr.vercel.app",
-    "http://apppedeacai.netlify.app"
+    "https://apppedeacai.netlify.app"
 ]
 
 
