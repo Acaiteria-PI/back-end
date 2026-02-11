@@ -1,6 +1,7 @@
 from django.utils.dateparse import parse_date
 from rest_framework.exceptions import ValidationError
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated
 
 from core.establishment.models import DailyRevenue
 from core.establishment.serializers import DailyRevenueSerializer
@@ -9,6 +10,7 @@ from core.establishment.serializers import DailyRevenueSerializer
 class DailyRevenueViewSet(ModelViewSet):
     queryset = DailyRevenue.objects.all().order_by("-date")
     serializer_class = DailyRevenueSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = super().get_queryset()
