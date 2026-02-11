@@ -5,3 +5,4 @@ from .final_cup import FinalCupSerializer
 from .custom_cup import CustomCupSerializer
 from .combo import ComboSerializer
 from .stock import StockSerializer
+from .daily_revenue import DailyRevenueSerializer

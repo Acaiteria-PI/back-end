@@ -5,3 +5,4 @@ from .custom_cup import CustomCup
 from .final_cup import FinalCup
 from .combo import Combo
 from .stock import Stock
+from .daily_revenue import DailyRevenue
